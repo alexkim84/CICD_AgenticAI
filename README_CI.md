@@ -1,8 +1,8 @@
 # Local Jenkins + Process Advisor Demo
 
 This repository verifies `models/crs_controller.slx` with Process Advisor.
-The pipeline compiles the model, checks its 11-input/5-output interface, and
-checks that the requirement set and model link set contain traceability data.
+Jenkins displays separate stages for Model Advisor, design error detection,
+requirements verification, and MIL/SIL back-to-back testing.
 
 ## Prerequisites
 
@@ -46,5 +46,6 @@ Jenkins through a secure public endpoint and enable the GitHub hook trigger.
 ## Outputs
 
 - `artifacts/process-advisor/ProcessAdvisorReport.html`
+- `artifacts/process-advisor/stage-reports/`
 - `artifacts/process-advisor/junit/`
 - compile, interface, and traceability evidence files

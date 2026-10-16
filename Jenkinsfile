@@ -1,5 +1,6 @@
 def runProcessAdvisorStage(taskID, reportName, junitFile) {
-    bat "if exist \"${junitFile}\" del /f /q \"${junitFile}\""
+    def resultExisted = fileExists(junitFile)
+    def previousResult = resultExisted ? readFile(junitFile) : ''
 
     def matlabStatus = bat(
         returnStatus: true,
@@ -13,6 +14,9 @@ def runProcessAdvisorStage(taskID, reportName, junitFile) {
     }
 
     def junitText = readFile(junitFile)
+    if (resultExisted && junitText == previousResult) {
+        error "Process Advisor did not refresh ${junitFile}."
+    }
     def passed = junitText.contains('failures="0"') &&
         junitText.contains('errors="0"')
     if (!passed) {

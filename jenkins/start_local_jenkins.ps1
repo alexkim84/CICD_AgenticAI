@@ -27,6 +27,7 @@ if (-not (Test-Path -LiteralPath $jenkinsHome)) {
 
 $env:JENKINS_HOME = $jenkinsHome
 $env:Path = "$gitFolder;$env:Path"
+$env:GIT_SSL_BACKEND = "openssl"
 Start-Process -FilePath $java `
     -ArgumentList @("-jar", $jenkinsWar, "--httpPort=$Port") `
     -WorkingDirectory $repositoryRoot `

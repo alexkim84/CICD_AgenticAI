@@ -1,22 +1,22 @@
 def runProcessAdvisorStage(taskID, reportName, junitFile) {
-    def resultExisted = fileExists(junitFile)
-    def previousResult = resultExisted ? readFile(junitFile) : ''
+    def runToken = java.util.UUID.randomUUID().toString()
+    def tokenFile = "artifacts/process-advisor/stage-reports/${reportName}.token"
 
     def matlabStatus = bat(
         returnStatus: true,
         script: """
-            "C:\\Program Files\\MATLAB\\R2026b\\bin\\matlab.exe" -batch "addpath(fullfile(pwd,'ci')); run_process_advisor_stage('${taskID}','${reportName}');"
+            "C:\\Program Files\\MATLAB\\R2026b\\bin\\matlab.exe" -batch "addpath(fullfile(pwd,'ci')); run_process_advisor_stage('${taskID}','${reportName}','${runToken}');"
         """
     )
 
     if (!fileExists(junitFile)) {
         error "MATLAB returned ${matlabStatus} and did not create ${junitFile}."
     }
+    if (!fileExists(tokenFile) || readFile(tokenFile).trim() != runToken) {
+        error "Process Advisor did not complete this ${taskID} invocation."
+    }
 
     def junitText = readFile(junitFile)
-    if (resultExisted && junitText == previousResult) {
-        error "Process Advisor did not refresh ${junitFile}."
-    }
     def passed = junitText.contains('failures="0"') &&
         junitText.contains('errors="0"')
     if (!passed) {

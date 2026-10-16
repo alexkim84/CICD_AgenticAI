@@ -35,6 +35,13 @@ codegen/
 # buildtool cache folder
 .buildtool/
 
+# Process Advisor and Simulink CI generated content
+work/
+artifacts/
+derived/
+.jenkins-home/
+.tools/
+
 # SimBiology backup files
 *.sbproj.backup
 *.sbproj.bak

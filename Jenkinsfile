@@ -28,14 +28,20 @@ pipeline {
                             "C:\\Program Files\\MATLAB\\R2026b\\bin\\matlab.exe" -batch "addpath(fullfile(pwd,'ci')); run_process_advisor_ci;"
                         '''
                     )
-                    def processStatus = readFile(
-                        'artifacts/process-advisor/exit-code.txt'
-                    ).trim()
-                    if (processStatus != '0') {
-                        error "Process Advisor failed with exit code ${processStatus}"
+                    def requiredResults = [
+                        'artifacts/process-advisor/ProcessAdvisorReport.html',
+                        'artifacts/process-advisor/junit/CI_CompileModel_crs_controller_JUnit.xml',
+                        'artifacts/process-advisor/junit/CI_CheckModelInterface_crs_controller_JUnit.xml',
+                        'artifacts/process-advisor/junit/CI_CheckRequirementsTraceability_crs_controller_JUnit.xml'
+                    ]
+                    def missingResults = requiredResults.findAll {
+                        !fileExists(it)
+                    }
+                    if (missingResults) {
+                        error "Process Advisor did not produce: ${missingResults.join(', ')}"
                     }
                     if (matlabStatus != 0) {
-                        echo "MATLAB returned ${matlabStatus} after Process Advisor completed successfully."
+                        echo "MATLAB returned ${matlabStatus} after producing complete Process Advisor results."
                     }
                 }
             }

@@ -21,9 +21,23 @@ pipeline {
     stages {
         stage('Process Advisor Verification') {
             steps {
-                bat '''
-                    "C:\\Program Files\\MATLAB\\R2026b\\bin\\matlab.exe" -batch "addpath(fullfile(pwd,'ci')); run_process_advisor_ci;"
-                '''
+                script {
+                    def matlabStatus = bat(
+                        returnStatus: true,
+                        script: '''
+                            "C:\\Program Files\\MATLAB\\R2026b\\bin\\matlab.exe" -batch "addpath(fullfile(pwd,'ci')); run_process_advisor_ci;"
+                        '''
+                    )
+                    def processStatus = readFile(
+                        'artifacts/process-advisor/exit-code.txt'
+                    ).trim()
+                    if (processStatus != '0') {
+                        error "Process Advisor failed with exit code ${processStatus}"
+                    }
+                    if (matlabStatus != 0) {
+                        echo "MATLAB returned ${matlabStatus} after Process Advisor completed successfully."
+                    }
+                }
             }
         }
     }

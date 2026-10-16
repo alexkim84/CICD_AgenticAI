@@ -1,0 +1,7 @@
+{
+  "approveMoreThan100Checks": true,
+  "expectedModelInputs": 11,
+  "expectedModelOutputs": 5,
+  "designVerifierMaxProcessTimeSeconds": 300,
+  "resultRoot": "tests/Results/VnV"
+}

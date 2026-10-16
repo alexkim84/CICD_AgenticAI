@@ -9,7 +9,7 @@ pipeline {
     options {
         disableConcurrentBuilds()
         timestamps()
-        timeout(time: 30, unit: 'MINUTES')
+        timeout(time: 90, unit: 'MINUTES')
     }
 
     triggers {
@@ -32,7 +32,14 @@ pipeline {
                         'artifacts/process-advisor/ProcessAdvisorReport.html',
                         'artifacts/process-advisor/junit/CI_CompileModel_crs_controller_JUnit.xml',
                         'artifacts/process-advisor/junit/CI_CheckModelInterface_crs_controller_JUnit.xml',
-                        'artifacts/process-advisor/junit/CI_CheckRequirementsTraceability_crs_controller_JUnit.xml'
+                        'artifacts/process-advisor/junit/CI_CheckRequirementsTraceability_crs_controller_JUnit.xml',
+                        'artifacts/process-advisor/junit/CI_ModelAdvisor_crs_controller_JUnit.xml',
+                        'artifacts/process-advisor/junit/CI_DesignErrorDetection_crs_controller_JUnit.xml',
+                        'artifacts/process-advisor/junit/CI_RequirementsMIL_crs_controller_JUnit.xml',
+                        'artifacts/process-advisor/junit/CI_MILSILEquivalence_crs_controller_JUnit.xml',
+                        'artifacts/process-advisor/junit/CI_GenerateCode_crs_controller_JUnit.xml',
+                        'artifacts/process-advisor/requirements-mil/RequirementsMIL_Report.pdf',
+                        'artifacts/process-advisor/mil-sil/MIL_SIL_Equivalence_Report.pdf'
                     ]
                     def missingResults = requiredResults.findAll {
                         !fileExists(it)

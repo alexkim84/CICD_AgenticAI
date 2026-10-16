@@ -39,6 +39,18 @@ codegen/
 work/
 artifacts/
 derived/
+tests/test_results/
+!tests/test_results/
+tests/test_results/*
+!tests/test_results/sldv_generated_relaxed/
+!tests/test_results/sldv_generated_relaxed/crs_controller_sldv_input.mat
+!tests/test_results/sil_coverage_inputs/
+!tests/test_results/sil_coverage_inputs/*.mat
+tests/Results/
+*_grt_rtw/
+*_ert_rtw/
+m2m_*/
+sldv_output/
 .jenkins-home/
 .tools/
 

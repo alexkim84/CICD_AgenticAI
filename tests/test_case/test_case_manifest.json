@@ -1,0 +1,333 @@
+{
+  "model": "crs_controller",
+  "requirement_set": "documents/crs_req_func_ears.slreqx",
+  "sample_time": 0.01,
+  "expected_value_source": "EARS requirement text and declared constants; no simulation output used",
+  "generated_count": 27,
+  "generated": [
+    {
+      "id": "REQ_002",
+      "name": "switch_precedence",
+      "pattern": "Event-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_002_switch_precedence_input.mat",
+      "baselineFile": "req_002_switch_precedence_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Cancel is the highest-priority simultaneous switch request."
+    },
+    {
+      "id": "REQ_003",
+      "name": "avoid_repeating_cancel",
+      "pattern": "State-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_003_avoid_repeating_cancel_input.mat",
+      "baselineFile": "req_003_avoid_repeating_cancel_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "The repeated Cancel request is expected to become NoRequest."
+    },
+    {
+      "id": "REQ_004",
+      "name": "long_switch_recognition",
+      "pattern": "Event-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_004_long_switch_recognition_input.mat",
+      "baselineFile": "req_004_long_switch_recognition_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Both Increment and Decrement are held for the 500 ms threshold."
+    },
+    {
+      "id": "REQ_005",
+      "name": "increment_waiting_state",
+      "pattern": "State-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_005_increment_waiting_state_input.mat",
+      "baselineFile": "req_005_increment_waiting_state_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Expected during an Increment hold shorter than 500 ms."
+    },
+    {
+      "id": "REQ_006",
+      "name": "decrement_waiting_state",
+      "pattern": "State-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_006_decrement_waiting_state_input.mat",
+      "baselineFile": "req_006_decrement_waiting_state_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Expected during a Decrement hold shorter than 500 ms."
+    },
+    {
+      "id": "REQ_007",
+      "name": "cancel_switch",
+      "pattern": "Event-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_007_cancel_switch_input.mat",
+      "baselineFile": "req_007_cancel_switch_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Single driver-switch activation."
+    },
+    {
+      "id": "REQ_008",
+      "name": "set_switch",
+      "pattern": "Event-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_008_set_switch_input.mat",
+      "baselineFile": "req_008_set_switch_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Single driver-switch activation."
+    },
+    {
+      "id": "REQ_009",
+      "name": "enable_switch",
+      "pattern": "Event-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_009_enable_switch_input.mat",
+      "baselineFile": "req_009_enable_switch_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Single driver-switch activation."
+    },
+    {
+      "id": "REQ_011",
+      "name": "increment_duration_classes",
+      "pattern": "Event-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_011_increment_duration_classes_input.mat",
+      "baselineFile": "req_011_increment_duration_classes_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Checks short, middle, and long Increment classifications."
+    },
+    {
+      "id": "REQ_012",
+      "name": "increment_short_on_release",
+      "pattern": "Event-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_012_increment_short_on_release_input.mat",
+      "baselineFile": "req_012_increment_short_on_release_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Expected is taken literally from the EARS requirement and may expose an implementation mismatch."
+    },
+    {
+      "id": "REQ_013",
+      "name": "increment_long",
+      "pattern": "Event-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_013_increment_long_input.mat",
+      "baselineFile": "req_013_increment_long_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Increment remains asserted for 500 ms."
+    },
+    {
+      "id": "REQ_014",
+      "name": "increment_middle",
+      "pattern": "State-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_014_increment_middle_input.mat",
+      "baselineFile": "req_014_increment_middle_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Increment remains asserted below the long-press threshold."
+    },
+    {
+      "id": "REQ_015",
+      "name": "decrement_duration_classes",
+      "pattern": "Event-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_015_decrement_duration_classes_input.mat",
+      "baselineFile": "req_015_decrement_duration_classes_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Checks short, middle, and long Decrement classifications."
+    },
+    {
+      "id": "REQ_016",
+      "name": "decrement_short_on_release",
+      "pattern": "Event-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_016_decrement_short_on_release_input.mat",
+      "baselineFile": "req_016_decrement_short_on_release_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Expected is taken literally from the EARS requirement and may expose an implementation mismatch."
+    },
+    {
+      "id": "REQ_017",
+      "name": "decrement_long",
+      "pattern": "Event-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_017_decrement_long_input.mat",
+      "baselineFile": "req_017_decrement_long_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Decrement remains asserted for 500 ms."
+    },
+    {
+      "id": "REQ_018",
+      "name": "decrement_middle",
+      "pattern": "State-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_018_decrement_middle_input.mat",
+      "baselineFile": "req_018_decrement_middle_baseline.mat",
+      "expectedSignals": "reqDrv",
+      "note": "Decrement remains asserted below the long-press threshold."
+    },
+    {
+      "id": "REQ_020",
+      "name": "any_disable_condition",
+      "pattern": "Unwanted behavior",
+      "scope": "crs_controller",
+      "inputFile": "req_020_any_disable_condition_input.mat",
+      "baselineFile": "req_020_any_disable_condition_baseline.mat",
+      "expectedSignals": "mode",
+      "note": "The controller first enters Enabled mode, then the disable condition is applied."
+    },
+    {
+      "id": "REQ_021",
+      "name": "key_not_on",
+      "pattern": "Unwanted behavior",
+      "scope": "crs_controller",
+      "inputFile": "req_021_key_not_on_input.mat",
+      "baselineFile": "req_021_key_not_on_baseline.mat",
+      "expectedSignals": "mode",
+      "note": "The controller first enters Enabled mode, then the disable condition is applied."
+    },
+    {
+      "id": "REQ_022",
+      "name": "gear_not_drive",
+      "pattern": "Unwanted behavior",
+      "scope": "crs_controller",
+      "inputFile": "req_022_gear_not_drive_input.mat",
+      "baselineFile": "req_022_gear_not_drive_baseline.mat",
+      "expectedSignals": "mode",
+      "note": "The controller first enters Enabled mode, then the disable condition is applied."
+    },
+    {
+      "id": "REQ_023",
+      "name": "brake_above_threshold",
+      "pattern": "Unwanted behavior",
+      "scope": "crs_controller",
+      "inputFile": "req_023_brake_above_threshold_input.mat",
+      "baselineFile": "req_023_brake_above_threshold_baseline.mat",
+      "expectedSignals": "mode",
+      "note": "The controller first enters Enabled mode, then the disable condition is applied."
+    },
+    {
+      "id": "REQ_024",
+      "name": "operation_mode_determination",
+      "pattern": "Event-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_024_operation_mode_determination_input.mat",
+      "baselineFile": "req_024_operation_mode_determination_baseline.mat",
+      "expectedSignals": "mode",
+      "note": "A Cruise request from the initial Disabled state selects Enabled mode."
+    },
+    {
+      "id": "REQ_025",
+      "name": "mode_precedence",
+      "pattern": "Event-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_025_mode_precedence_input.mat",
+      "baselineFile": "req_025_mode_precedence_baseline.mat",
+      "expectedSignals": "mode",
+      "note": "Disable is expected to override a simultaneous lower-priority Set request."
+    },
+    {
+      "id": "REQ_026",
+      "name": "disable_condition",
+      "pattern": "Unwanted behavior",
+      "scope": "crs_controller",
+      "inputFile": "req_026_disable_condition_input.mat",
+      "baselineFile": "req_026_disable_condition_baseline.mat",
+      "expectedSignals": "mode",
+      "note": "The controller first enters Enabled mode, then the disable condition is applied."
+    },
+    {
+      "id": "REQ_030",
+      "name": "retain_previous_mode",
+      "pattern": "Event-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_030_retain_previous_mode_input.mat",
+      "baselineFile": "req_030_retain_previous_mode_baseline.mat",
+      "expectedSignals": "mode",
+      "note": "With no subsequent transition request, Enabled mode is retained."
+    },
+    {
+      "id": "REQ_036",
+      "name": "disable_override",
+      "pattern": "Unwanted behavior",
+      "scope": "crs_controller",
+      "inputFile": "req_036_disable_override_input.mat",
+      "baselineFile": "req_036_disable_override_baseline.mat",
+      "expectedSignals": "mode",
+      "note": "Environmental disable overrides a simultaneous Set request."
+    },
+    {
+      "id": "REQ_038",
+      "name": "disabled_outputs",
+      "pattern": "State-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_038_disabled_outputs_input.mat",
+      "baselineFile": "req_038_disabled_outputs_baseline.mat",
+      "expectedSignals": "targetSp,throtCC",
+      "note": "Disabled mode uses tsp_min (40) and passes through driver throttle."
+    },
+    {
+      "id": "REQ_039",
+      "name": "enabled_outputs",
+      "pattern": "State-driven",
+      "scope": "crs_controller",
+      "inputFile": "req_039_enabled_outputs_input.mat",
+      "baselineFile": "req_039_enabled_outputs_baseline.mat",
+      "expectedSignals": "targetSp,throtCC",
+      "note": "Enabled mode uses vehicle speed and passes through driver throttle."
+    }
+  ],
+  "excluded": [
+    {
+      "id": "REQ_010",
+      "reason": "Requirement names reqMode.Resume, but the declared enum literal is reqMode.ResumeReq."
+    },
+    {
+      "id": "REQ_027",
+      "reason": "Enable conditions are not enumerated in the requirement."
+    },
+    {
+      "id": "REQ_028",
+      "reason": "Resume conditions are not enumerated in the requirement."
+    },
+    {
+      "id": "REQ_029",
+      "reason": "Activation conditions are not enumerated in the requirement."
+    },
+    {
+      "id": "REQ_031",
+      "reason": "Target-speed increment magnitude is unspecified."
+    },
+    {
+      "id": "REQ_032",
+      "reason": "Increment-and-hold rate and hold timing are unspecified."
+    },
+    {
+      "id": "REQ_033",
+      "reason": "Target-speed decrement magnitude is unspecified."
+    },
+    {
+      "id": "REQ_034",
+      "reason": "Decrement-and-hold rate and hold timing are unspecified."
+    },
+    {
+      "id": "REQ_035",
+      "reason": "The specified out-of-range flag is not a top-model output."
+    },
+    {
+      "id": "REQ_040",
+      "reason": "The referenced active-control requirements do not fully define expected numeric outputs."
+    },
+    {
+      "id": "REQ_041",
+      "reason": "The PI equation, initial condition, update rule, and saturation behavior are incomplete."
+    },
+    {
+      "id": "REQ_042",
+      "reason": "The next-target-speed increment/decrement magnitude is unspecified."
+    },
+    {
+      "id": "REQ_043",
+      "reason": "Stored-target initialization and subsequent active-control outputs are incomplete."
+    }
+  ]
+}

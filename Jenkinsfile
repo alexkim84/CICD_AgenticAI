@@ -1,3 +1,29 @@
+def runProcessAdvisorStage(taskID, reportName, junitFile) {
+    bat "if exist \"${junitFile}\" del /f /q \"${junitFile}\""
+
+    def matlabStatus = bat(
+        returnStatus: true,
+        script: """
+            "C:\\Program Files\\MATLAB\\R2026b\\bin\\matlab.exe" -batch "addpath(fullfile(pwd,'ci')); run_process_advisor_stage('${taskID}','${reportName}');"
+        """
+    )
+
+    if (!fileExists(junitFile)) {
+        error "MATLAB returned ${matlabStatus} and did not create ${junitFile}."
+    }
+
+    def junitText = readFile(junitFile)
+    def passed = junitText.contains('failures="0"') &&
+        junitText.contains('errors="0"')
+    if (!passed) {
+        error "Process Advisor task ${taskID} reported a verification failure."
+    }
+    if (matlabStatus != 0) {
+        echo "MATLAB returned ${matlabStatus} after the task passed. " +
+            "Using the generated JUnit result as the stage status."
+    }
+}
+
 pipeline {
     agent {
         node {
@@ -21,33 +47,49 @@ pipeline {
     stages {
         stage('Model Advisor Check') {
             steps {
-                bat '''
-                    "C:\\Program Files\\MATLAB\\R2026b\\bin\\matlab.exe" -batch "addpath(fullfile(pwd,'ci')); run_process_advisor_stage('CI.ModelAdvisor','ModelAdvisorCheck');"
-                '''
+                script {
+                    runProcessAdvisorStage(
+                        'CI.ModelAdvisor',
+                        'ModelAdvisorCheck',
+                        'artifacts/process-advisor/junit/CI_ModelAdvisor_crs_controller_JUnit.xml'
+                    )
+                }
             }
         }
 
         stage('Design Error Check') {
             steps {
-                bat '''
-                    "C:\\Program Files\\MATLAB\\R2026b\\bin\\matlab.exe" -batch "addpath(fullfile(pwd,'ci')); run_process_advisor_stage('CI.DesignErrorDetection','DesignErrorCheck');"
-                '''
+                script {
+                    runProcessAdvisorStage(
+                        'CI.DesignErrorDetection',
+                        'DesignErrorCheck',
+                        'artifacts/process-advisor/junit/CI_DesignErrorDetection_crs_controller_JUnit.xml'
+                    )
+                }
             }
         }
 
         stage('Requirements Verification') {
             steps {
-                bat '''
-                    "C:\\Program Files\\MATLAB\\R2026b\\bin\\matlab.exe" -batch "addpath(fullfile(pwd,'ci')); run_process_advisor_stage('CI.RequirementsMIL','RequirementsVerification');"
-                '''
+                script {
+                    runProcessAdvisorStage(
+                        'CI.RequirementsMIL',
+                        'RequirementsVerification',
+                        'artifacts/process-advisor/junit/CI_RequirementsMIL_crs_controller_JUnit.xml'
+                    )
+                }
             }
         }
 
         stage('Back-to-Back Test') {
             steps {
-                bat '''
-                    "C:\\Program Files\\MATLAB\\R2026b\\bin\\matlab.exe" -batch "addpath(fullfile(pwd,'ci')); run_process_advisor_stage('CI.MILSILEquivalence','BackToBackTest');"
-                '''
+                script {
+                    runProcessAdvisorStage(
+                        'CI.MILSILEquivalence',
+                        'BackToBackTest',
+                        'artifacts/process-advisor/junit/CI_MILSILEquivalence_crs_controller_JUnit.xml'
+                    )
+                }
             }
         }
     }

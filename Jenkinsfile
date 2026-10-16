@@ -1,6 +1,7 @@
 pipeline {
     agent {
         node {
+            label ''
             customWorkspace 'C:\\AgenticAI\\jenkins-workspace\\CICD_AgenticAI'
         }
     }

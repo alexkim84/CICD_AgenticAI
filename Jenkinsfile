@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        node {
+            customWorkspace 'C:\\AgenticAI\\jenkins-workspace\\CICD_AgenticAI'
+        }
+    }
 
     options {
         disableConcurrentBuilds()
@@ -16,9 +20,8 @@ pipeline {
     stages {
         stage('Process Advisor Verification') {
             steps {
-                runMATLABCommand '''
-                    addpath(fullfile(pwd, "ci"));
-                    run_process_advisor_ci;
+                bat '''
+                    "C:\\Program Files\\MATLAB\\R2026b\\bin\\matlab.exe" -batch "addpath(fullfile(pwd,'ci')); run_process_advisor_ci;"
                 '''
             }
         }

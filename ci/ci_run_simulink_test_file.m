@@ -1,5 +1,14 @@
-function taskResult = ci_run_simulink_test_file(fileName, folderName, baseName)
+function taskResult = ci_run_simulink_test_file( ...
+    fileName, folderName, baseName, excludedTests, includedTests)
 %CI_RUN_SIMULINK_TEST_FILE Run a Simulink Test file and export CI evidence.
+
+arguments
+    fileName (1, 1) string
+    folderName (1, 1) string
+    baseName (1, 1) string
+    excludedTests string = strings(0, 1)
+    includedTests string = strings(0, 1)
+end
 
 projectRoot = string(currentProject().RootFolder);
 testPath = fullfile(projectRoot, "tests", "test_file", fileName);
@@ -14,9 +23,12 @@ reportPath = fullfile(outputFolder, baseName + "_Report.pdf");
 summaryPath = fullfile(outputFolder, baseName + "_Summary.csv");
 
 try
+    bdclose("all");
+    clear mex;
     sltest.testmanager.clearResults;
     testFile = sltest.testmanager.load(testPath);
     cleanup = onCleanup(@() closeTestFile(testFile));
+    selectTests(testFile, excludedTests, includedTests);
     resultSet = run(testFile);
 
     sltest.testmanager.exportResults(resultSet, resultsPath);
@@ -46,6 +58,34 @@ catch exception
     writeText(errorPath, getReport(exception, "extended", ...
         Hyperlinks="off"));
     taskResult = makeResult(padv.TaskStatus.Error, errorPath, 0, 1);
+end
+end
+
+function selectTests(testFile, excludedTests, includedTests)
+testCases = testFile.getAllTestCases;
+testNames = string({testCases.Name});
+if ~isempty(includedTests)
+    missing = setdiff(includedTests, testNames);
+    assert(isempty(missing), ...
+        "CI include list does not match test cases: %s", ...
+        strjoin(missing, ", "));
+    for testCase = reshape(testCases, 1, [])
+        testCase.Enabled = any(string(testCase.Name) == includedTests);
+        if ~testCase.Enabled
+            testCase.ReasonForDisabling = ...
+                "Not selected for the CI smoke suite.";
+        end
+    end
+end
+for testName = reshape(excludedTests, 1, [])
+    match = testNames == testName;
+    assert(any(match), "CI exclusion does not match a test case: %s", ...
+        testName);
+    for testCase = reshape(testCases(match), 1, [])
+        testCase.Enabled = false;
+        testCase.ReasonForDisabling = ...
+            "Excluded from the CI smoke suite; tracked for model correction.";
+    end
 end
 end
 

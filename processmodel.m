@@ -6,7 +6,13 @@ arguments
 end
 
 pm.DefaultOutputDirectory = fullfile("$PROJECTROOT$", "artifacts", "process-advisor");
-pm.JUnitReportPath = fullfile("$DEFAULTOUTPUTDIR$", "junit");
+junitRunToken = string(getenv("CI_RUN_TOKEN"));
+if strlength(junitRunToken) == 0
+    pm.JUnitReportPath = fullfile("$DEFAULTOUTPUTDIR$", "junit");
+else
+    pm.JUnitReportPath = fullfile("$DEFAULTOUTPUTDIR$", "junit", ...
+        junitRunToken);
+end
 
 projectRoot = string(currentProject().RootFolder);
 modelQuery = padv.builtin.query.FindFileWithAddress( ...

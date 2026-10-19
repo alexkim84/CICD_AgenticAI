@@ -2,30 +2,47 @@ def runProcessAdvisorStage(taskID, reportName, junitFile) {
     def runToken = java.util.UUID.randomUUID().toString()
     def junitName = junitFile.tokenize('/').last()
     def runJunitFile = "artifacts/process-advisor/junit/${runToken}/${junitName}"
+    def stageReportDir = 'artifacts/process-advisor/stage-reports'
+    def stageReportFile = "${reportName}.html"
 
     def matlabStatus
-    withEnv(["CI_RUN_TOKEN=${runToken}"]) {
-        matlabStatus = bat(
-            returnStatus: true,
-            script: """
-                "C:\\Program Files\\MATLAB\\R2026b\\bin\\matlab.exe" -batch "addpath(fullfile(pwd,'ci')); run_process_advisor_stage('${taskID}','${reportName}');"
-            """
-        )
-    }
+    try {
+        withEnv(["CI_RUN_TOKEN=${runToken}"]) {
+            matlabStatus = bat(
+                returnStatus: true,
+                script: """
+                    "C:\\Program Files\\MATLAB\\R2026b\\bin\\matlab.exe" -batch "addpath(fullfile(pwd,'ci')); run_process_advisor_stage('${taskID}','${reportName}');"
+                """
+            )
+        }
 
-    if (!fileExists(runJunitFile)) {
-        error "MATLAB returned ${matlabStatus} and did not create ${runJunitFile}."
-    }
+        if (!fileExists(runJunitFile)) {
+            error "MATLAB returned ${matlabStatus} and did not create ${runJunitFile}."
+        }
 
-    def junitText = readFile(runJunitFile)
-    def passed = junitText.contains('failures="0"') &&
-        junitText.contains('errors="0"')
-    if (!passed) {
-        error "Process Advisor task ${taskID} reported a verification failure."
-    }
-    if (matlabStatus != 0) {
-        echo "MATLAB returned ${matlabStatus} after the task passed. " +
-            "Using the generated JUnit result as the stage status."
+        def junitText = readFile(runJunitFile)
+        def passed = junitText.contains('failures="0"') &&
+            junitText.contains('errors="0"')
+        if (!passed) {
+            error "Process Advisor task ${taskID} reported a verification failure."
+        }
+        if (matlabStatus != 0) {
+            echo "MATLAB returned ${matlabStatus} after the task passed. " +
+                "Using the generated JUnit result as the stage status."
+        }
+    } finally {
+        if (fileExists("${stageReportDir}/${stageReportFile}")) {
+            publishHTML(target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: false,
+                keepAll: true,
+                reportDir: stageReportDir,
+                reportFiles: stageReportFile,
+                reportName: "${reportName} Report"
+            ])
+        } else {
+            echo "HTML report was not generated: ${stageReportDir}/${stageReportFile}"
+        }
     }
 }
 
